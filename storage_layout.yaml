@@ -1,0 +1,93 @@
+modules:
+  Entropy:
+    type: rolling_shelf_with_bins
+    levels: [1, 2, 3, 4]
+    layout:
+      rows: tbd
+      columns: tbd
+    notes: Rolling shelf with 4 vertical levels, bins tbd per level.
+
+  Vector:
+    type: small_drawer_boxes
+    levels: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    layout:
+      rows: [1, 2, 3, 4]
+      columns: [A, B, C, D]
+    subdivision: optional_half
+    notes: Akro-Mils small drawer boxes; each box is one level.
+
+  Quark:
+    type: large_drawer_boxes
+    levels: [1, 2, 3, 4]
+    layout:
+      rows: [1, 2, 3, 4, 5, 6]
+      columns: [A, B, C, D]
+    subdivision: optional_half
+    notes: Akro-Mils large drawer boxes; 6x4 layout per level.
+
+  Photon:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Neutrino:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Gluon:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Muon:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Higgs:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Fermion:
+    type: wire_shelves
+    levels: [1, 2, 3, 4, 5]
+    notes: Metro rolling wire shelf.
+
+  Delta:
+    type: rivet_lock_shelves
+    levels: [1, 2, 3, 4]
+    notes: Edsal rivet lock shelving with welded wire shelves.
+
+  Sigma:
+    type: rivet_lock_shelves
+    levels: [1, 2, 3, 4]
+    notes: Edsal rivet lock shelving with welded wire shelves.
+
+  Pi:
+    type: rivet_lock_shelves
+    levels: [1, 2, 3, 4]
+    notes: Edsal rivet lock shelving with welded wire shelves.
+
+  Planck:
+    type: gridfinity_drawers
+    drawers: 6
+    layout_per_drawer:
+      x: tbd
+      y: tbd
+    notes: Gridfinity drawers in IKEA unit.
+
+  Kepler:
+    type: gridfinity_drawers
+    drawers: 5
+    layout_per_drawer:
+      x: tbd
+      y: tbd
+    notes: Gridfinity drawers in IKEA unit.
+
+  Copernicus:
+    type: gridfinity_drawers
+    drawers: 5
+    layout_per_drawer: none
+    notes: Gridfinity drawers in Amazon drawer unit.
