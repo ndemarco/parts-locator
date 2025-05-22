@@ -1,0 +1,46 @@
+body, html {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: lightblue;
+}
+
+.content {
+    margin: 0 auto;
+    width: 400px;
+}
+
+table, td, th {
+    border: 1px solid #aaa;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    height: 30px;
+}
+
+td {
+    text-align: center;
+    padding: 5px;
+}
+
+table inputpty[type="text"] {
+    width: 95%;
+    box-sizing: border-box;
+}
+
+table input[type="submit"] {
+    padding: 5px 10px;
+}
+
+.form {
+    margin-top: 20px;
+}
+
+.wrap-text {
+    white-space: normal;
+    word-break: break-word;
+}
