@@ -44,3 +44,13 @@ table input[type="submit"] {
     white-space: normal;
     word-break: break-word;
 }
+
+.deleted-row {
+    background-color: #f9f9f9;
+    color: #888;
+}
+
+.deleted-row td::before {
+    content: "⚠ ";
+    color: orange;
+}
