@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block body %}
+    <p style="text-align: center; margin-bottom: 10px;">
+        <a href="/deleted">View Deleted Parts</a>
+    </p>
+
     <div class="description">
         <h1 style="text-align: center">Workshop Parts Tracker</h1>
         <table>
@@ -19,12 +23,22 @@
             {% for part in parts %}
                 <tr>
                     <td>{{ part.id }}</td>
-                    <td class="wrap-text">{{ part.description }}</td>
-                    <td>{{ part.location }}</td>
+
+                    <td class="wrap-text desc" data-id="{{ part.id }}">
+                        {{ part.description }}
+                    </td>
+
+                    <td class="wrap-text loc" data-id="{{ part.id }}">
+                        {{ part.location }}
+                    </td>
+
                     <td>{{ part.date_created.date() }}</td>
+
                     <td>
-                        <a href="/update/{{part.id}}">Update</a>
-                        <a href="/delete/{{part.id}}">Delete</a>
+                        <button class="edit-btn" data-id="{{ part.id }}">Update</button>
+                        <button class="cancel-btn" data-id="{{ part.id }}" style="display: none;">Cancel</button>
+                        <button class="save-btn" data-id="{{ part.id }}" style="display: none;">Save</button>
+                        <a href="/delete/{{ part.id }}">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -44,4 +58,61 @@
             <h4 style="text-align: center;">It's lonely in here. Won't you create a part, please?</h4>
         {% endif %}
     </div>
+       
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('click', function (event) {
+            const target = event.target;
+            const id = target.dataset.id;
+
+            // Handle Edit
+            if (target.classList.contains('edit-btn')) {
+                const descTd = document.querySelector(`.desc[data-id="${id}"]`);
+                const locTd = document.querySelector(`.loc[data-id="${id}"]`);
+
+                const currentDesc = descTd.textContent.trim();
+                const currentLoc = locTd.textContent.trim();
+
+                descTd.innerHTML = `<input type="text" value="${currentDesc}" style="width: 90%;">`;
+                locTd.innerHTML = `<input type="text" value="${currentLoc}" style="width: 90%;">`;
+
+                target.style.display = 'none';
+                document.querySelector(`.cancel-btn[data-id="${id}"]`).style.display = 'inline-block';
+                document.querySelector(`.save-btn[data-id="${id}"]`).style.display = 'inline-block';
+            }
+
+            // Handle Cancel
+            else if (target.classList.contains('cancel-btn')) {
+                window.location.reload(); // quick way to revert
+            }
+
+            // Handle Save
+            else if (target.classList.contains('save-btn')) {
+                const descInput = document.querySelector(`.desc[data-id="${id}"] input`);
+                const locInput = document.querySelector(`.loc[data-id="${id}"] input`);
+
+                const newDesc = descInput.value;
+                const newLoc = locInput.value;
+
+                fetch(`/update-inline/${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: newDesc,
+                        location: newLoc
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Update failed');
+                    }
+                });
+            }
+        });
+    });
+    </script>
+
 {% endblock %}
+

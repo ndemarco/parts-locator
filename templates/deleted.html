@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Deleted Parts</title>
+{% endblock %}
+
+{% block body %}
+    <div class="description">
+        <h1 style="text-align: center">Recently Deleted Parts</h1>
+        <table>
+            <tr>
+                <th>Part ID</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Deleted At</th>
+                <th>Actions</th>
+            </tr>
+            {% for part in parts %}
+            <tr class="deleted-row">
+                <td>{{ part.id }}</td>
+                <td class="wrap-text">{{ part.description }}</td>
+                <td>{{ part.location }}</td>
+                <td>{{ part.deleted_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                <td>
+                    <form action="/undelete/{{ part.id }}" method="post">
+                        <button type="submit">Undo</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
