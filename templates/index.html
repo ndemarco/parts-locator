@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Workshop Parts Tracker</title>
+{% endblock %}
+
+{% block body %}
+    <div class="description">
+        <h1 style="text-align: center">Workshop Parts Tracker</h1>
+        <table>
+            <tr>
+                <th>Part ID</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for part in parts %}
+                <tr>
+                    <td>{{ part.id }}</td>
+                    <td class="wrap-text">{{ part.description }}</td>
+                    <td>{{ part.location }}</td>
+                    <td>{{ part.date_created.date() }}</td>
+                    <td>
+                        <a href="/update/{{part.id}}">Update</a>
+                        <a href="/delete/{{part.id}}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        
+            <tr>
+                <form action="/" method="POST">
+                    <td>-</td>
+                    <td><input type="text" name="description" id="description" required></td>
+                    <td><input type="text" name="location" id="location" required></td>
+                    <td>-</td>
+                    <td><input type="submit" value="Add Part"></td>
+                </form>
+            </tr>
+        </table>
+        
+        {% if parts|length < 1 %}
+            <h4 style="text-align: center;">It's lonely in here. Won't you create a part, please?</h4>
+        {% endif %}
+    </div>
+{% endblock %}
