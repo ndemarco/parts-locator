@@ -1,5 +1,5 @@
-from app.part_locator import app, Parts
-from flask import request, render_template
+from flask import current_app as app, request, render_template
+from app.parts import Parts
 
 @app.route('/search')
 def search():

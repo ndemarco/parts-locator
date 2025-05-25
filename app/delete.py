@@ -1,6 +1,7 @@
-from app.part_locator import app, db, Parts
 from datetime import datetime, timezone
-from flask import redirect, render_template
+from flask import current_app as app, redirect, render_template
+from app.parts import Parts
+from app import db
 
 @app.route('/delete/<int:id>')
 def delete(id):
