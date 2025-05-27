@@ -15,7 +15,7 @@ def create_app():
     # . means current package. Because app/ contains __init__.py
     # Python cosiders app/ as a package named `app`
     with app.app_context():
-        from . import parts, locations, search, delete
+        from . import parts, locations, search, delete, locations
         db.create_all()
     
     return app
