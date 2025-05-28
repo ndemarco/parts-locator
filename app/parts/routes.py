@@ -1,20 +1,10 @@
-from flask import render_template, request, redirect, jsonify
+from flask import render_template, request, redirect, url_for, jsonify
+from . import bp
+from app.models import db, Parts
 from datetime import datetime, timezone
-from flask import current_app as app
-from app import db
 
-class Parts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(200), nullable=False)
-    location = db.Column(db.String(200), nullable=False)
-    mcmaster_id = db.Column(db.String(15))
-    date_created = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    deleted_at = db.Column(db.DateTime, nullable=True)
 
-    def __repr__(self):
-        return f"<Part {self.id}: {self.description}>"
-    
-@app.route('/', methods=['POST', 'GET'])
+@bp.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         part_description = request.form['description']
@@ -32,7 +22,7 @@ def index():
         parts = Parts.query.filter(Parts.deleted_at == None).order_by(Parts.date_created).all()
         return render_template('index.html', parts=parts)
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
+@bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     part = Parts.query.get_or_404(id)
     if request.method == 'POST':
@@ -46,7 +36,7 @@ def update(id):
     else:
         return render_template('update.html', part=part)
     
-@app.route('/update-inline/<int:id>', methods=['POST'])
+@bp.route('/update-inline/<int:id>', methods=['POST'])
 def update_inline(id):
     data = request.get_json()
     part = Parts.query.get_or_404(id)
@@ -60,3 +50,26 @@ def update_inline(id):
     except:
         return jsonify({'success': False}), 500
     
+    
+@bp.route('/delete/<int:id>')
+def delete_part(id):
+    part_to_delete = Parts.query.get_or_404(id)
+    part_to_delete.deleted_at = datetime.now(timezone.utc)
+    db.session.commit()
+    return redirect(url_for('parts.index'))
+
+@bp.route('/view_deleted_parts')
+def view_deleted():
+    deleted_parts = Parts.query.filter(Parts.deleted_at != None).order_by(Parts.deleted_at.desc()).all()
+    return render_template('deleted.html', parts=deleted_parts)
+
+@bp.route('/undelete/<int:id>', methods=['POST'])
+def undelete(id):
+    part = Parts.query.get_or_404(id)
+    part.deleted_at = None
+
+    try:
+        db.session.commit()
+        return redirect(url_for('parts.view_deleted_parts'))
+    except:
+        return "There was a problem restoring the part."

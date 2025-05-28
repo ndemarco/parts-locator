@@ -1,25 +1,3 @@
-import json
-import re
-from datetime import datetime, timezone
-from flask import request, redirect, render_template, flash
-from flask import current_app as app
-from app import db
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import UniqueConstraint
-
-class Location(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    module = db.Column(db.String(50), nullable=False)
-    level = db.Column(db.String(50), nullable=False)
-    position = db.Column(db.String(50), nullable=False)
-
-    __table_args__ = (UniqueConstraint('module', 'level', 'position', name='_module_level_position_uc'),)
-
-class LocationDefinition(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    json_data = db.Column(db.Text, nullable=False)
-    date_created = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-
 @app.route('/locations', methods=['GET', 'POST'])
 def locations():
     if request.method == 'POST':
