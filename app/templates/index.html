@@ -6,7 +6,7 @@
 
 {% block body %}
     <p style="text-align: center; margin-bottom: 10px;">
-        <a href="/deleted">View Deleted Parts</a>
+        <a href="/view_deleted_parts">View Deleted Parts</a>
     </p>
 
     <div class="description">
@@ -38,7 +38,7 @@
                         <button class="edit-btn" data-id="{{ part.id }}">Update</button>
                         <button class="cancel-btn" data-id="{{ part.id }}" style="display: none;">Cancel</button>
                         <button class="save-btn" data-id="{{ part.id }}" style="display: none;">Save</button>
-                        <a href="/delete/{{ part.id }}">Delete</a>
+                        <a href="{{ url_for('parts.delete_part', id=part.id) }}">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
