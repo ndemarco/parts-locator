@@ -71,6 +71,17 @@ async function doSearch(q = '') {
   renderParts(parts);
 }
 
+function updateSearch(query) {
+    const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
+    window.history.replaceState({ path: newUrl }, '', newUrl);
+    doSearch(query)
+}
+
+$('#search-input').addEventListener('input', () => {
+    const query = $('#search-input').value;
+    updateSearch(query);
+});
+
 function updateActionButtons() {
   const selected = $$('.row-select:checked');
   $('#actions').style.display = selected.length ? 'block' : 'none';
@@ -86,12 +97,15 @@ function attachSelectionListeners() {
   });
 }
 
-$('#search-input').addEventListener('input', () => {
-  doSearch($('#search-input').value);
-});
+
 
 // Initial load
-doSearch();
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get ('q') || '';
+    $('#search-input').value = query;
+    doSearch(query);
+});
 
 $('#edit-btn').onclick = () => {
   const selectedRow = $('.row-select:checked').closest('tr');
