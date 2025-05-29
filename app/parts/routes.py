@@ -24,18 +24,20 @@ def index():
     
 @bp.route('/parts/new', methods=['GET', 'POST'])
 def new_part():
+    return_to = request.form.get('returnTo') or url_for('parts.index')
     if request.method == 'POST':
         description = request.form['description']
         location = request.form['location']
         part = Parts(description=description, location=location)
         db.session.add(part)
         db.session.commit()
-        return redirect(url_for('parts.index'))
+        return redirect(return_to)
 
     return render_template('part_form.html')
 
 @bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_part(id):
+    return_to = request.form.get('returnTo') or url_for('parts.index')
     part = Parts.query.get_or_404(id)
     if request.method == 'POST':
         part.description = request.form['description']
@@ -43,7 +45,7 @@ def update_part(id):
 
         try:
             db.session.commit()
-            return redirect(url_for('parts.index'))
+            return redirect(return_to)
         except Exception as e:
             return 'There was an issue updating the part.'
     else:

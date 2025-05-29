@@ -107,10 +107,16 @@ window.addEventListener('DOMContentLoaded', () => {
     doSearch(query);
 });
 
+$('#add-part-btn').onclick = () => {
+    sessionStorage.setItem('returnTo', window.location.href);
+    window.location.href = '/parts/new';
+};
+
 $('#edit-btn').onclick = () => {
-  const selectedRow = $('.row-select:checked').closest('tr');
-  const id = selectedRow.dataset.id;
-  window.location.href = `/update/${id}`;
+    const selectedRow = $('.row-select:checked').closest('tr');
+    const id = selectedRow.dataset.id;
+    sessionStorage.setItem('returnTo', window.location.href);
+    window.location.href = `/update/${id}`;
 };
 
 $('#delete-btn').onclick = () => {
@@ -125,6 +131,7 @@ $('#delete-btn').onclick = () => {
   }
 };
 
-$('#add-part-btn').onclick = () => window.location.href = '/parts/new';
+
+
 </script>
 {% endblock %}

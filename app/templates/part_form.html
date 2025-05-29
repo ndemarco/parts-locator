@@ -12,7 +12,7 @@
 <form method="POST" style="width:300px;margin:auto;">
   <div>
     <label>Description:</label><br>
-    <input type="text" name="description" required style="width:100%;"
+    <input type="text" name="description" id="description" required style="width:100%;"
             value="{{ part.description if action == 'update' else '' }}">
   </div>
   
@@ -23,9 +23,39 @@
   </div>
 
   <div style="text-align:center;margin-top:15px;">
+    <button type="button" onclick="window.history.back()" style="margin-left: 10px;">Cancel</button>
+    </button>
     <button type="submit">
       {% if action == 'update' %}Update Part{% else %}Add Part{% endif %}
     </button>
+
   </div>
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+  // Focus the input field when the page loads.
+  document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('description');
+    if (input) {
+      input.focus();
+    }
+  });
+
+  // Add a hidden input for returnTo if in sessionStorage.
+  document.addEventListener('DOMContentLoaded', () => {
+    const returnTo = sessionStorage.getItem('returnTo');
+    if (returnTo) {
+      const form = document.querySelector('form');
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'returnTo';
+      input.value = returnTo;
+      form.appendChild(input);
+      sessionStorage.removeItem('returnTo');
+    }
+  });
+</script>
 {% endblock %}
