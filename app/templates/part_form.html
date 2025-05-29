@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{% if action == 'update' %}Edit Part{% else %}Add New Part{% endif %}</title>
+{% endblock %}
+
+{% block body %}
+<h1 style="text-align: center;">
+  {% if action == 'update' %}Edit Part{% else %}Add New Part{% endif %}
+</h1>
+
+<form method="POST" style="width:300px;margin:auto;">
+  <div>
+    <label>Description:</label><br>
+    <input type="text" name="description" required style="width:100%;"
+            value="{{ part.description if action == 'update' else '' }}">
+  </div>
+  
+  <div style="margin-top:10px;">
+    <label>Location:</label><br>
+    <input type="text" name="location" required style="width:100%;"
+            value="{{ part.location if action == 'update' else ''}}">
+  </div>
+
+  <div style="text-align:center;margin-top:15px;">
+    <button type="submit">
+      {% if action == 'update' %}Update Part{% else %}Add Part{% endif %}
+    </button>
+  </div>
+</form>
+{% endblock %}

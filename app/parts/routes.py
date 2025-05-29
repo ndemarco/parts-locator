@@ -32,36 +32,24 @@ def new_part():
         db.session.commit()
         return redirect(url_for('parts.index'))
 
-    return render_template('new_part.html')
+    return render_template('part_form.html')
 
 @bp.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
+def update_part(id):
     part = Parts.query.get_or_404(id)
     if request.method == 'POST':
         part.description = request.form['description']
+        part.location = request.form['location']
 
         try:
             db.session.commit()
-            return redirect('/')
-        except:
+            return redirect(url_for('parts.index'))
+        except Exception as e:
             return 'There was an issue updating the part.'
     else:
-        return render_template('update.html', part=part)
+        return render_template('part_form.html', part=part, action='update')
     
-@bp.route('/update-inline/<int:id>', methods=['POST'])
-def update_inline(id):
-    data = request.get_json()
-    part = Parts.query.get_or_404(id)
-
-    part.description = data.get('description', part.description)
-    part.location = data.get('location', part.location)
-
-    try:
-        db.session.commit()
-        return jsonify({'success': True})
-    except:
-        return jsonify({'success': False}), 500
-    
+  
     
 @bp.route('/delete/<int:id>')
 def delete_part(id):

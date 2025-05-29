@@ -96,7 +96,7 @@ doSearch();
 $('#edit-btn').onclick = () => {
   const selectedRow = $('.row-select:checked').closest('tr');
   const id = selectedRow.dataset.id;
-  window.location.href = `/parts/edit/${id}`;
+  window.location.href = `/update/${id}`;
 };
 
 $('#delete-btn').onclick = () => {
