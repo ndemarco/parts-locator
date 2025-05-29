@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Add New Part</title>
+{% endblock %}
+
+{% block body %}
+<h1 style="text-align:center;">Add New Part</h1>
+
+<form method="POST" style="width:300px;margin:auto;">
+  <div>
+    <label>Description:</label><br>
+    <input type="text" name="description" required style="width:100%;">
+  </div>
+  
+  <div style="margin-top:10px;">
+    <label>Location:</label><br>
+    <input type="text" name="location" required style="width:100%;">
+  </div>
+
+  <div style="text-align:center;margin-top:15px;">
+    <button type="submit">Add Part</button>
+  </div>
+</form>
+{% endblock %}

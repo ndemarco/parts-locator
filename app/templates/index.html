@@ -1,118 +1,116 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Workshop Parts Tracker</title>
+<title>Workshop Parts Tracker</title>
+<style>
+  .search-wrapper { text-align:center; margin: 2rem 0; }
+  #search-input { width: min(400px,90%); padding: .6rem 1rem; font-size: 1.1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: .4rem .6rem; border-bottom: 1px solid #ddd; }
+  tr.selected { background-color: #eef; }
+  button { margin-right: .5rem; }
+</style>
 {% endblock %}
 
 {% block body %}
-    <p style="text-align: center; margin-bottom: 10px;">
-        <a href="/view_deleted_parts">View Deleted Parts</a>
-    </p>
+<h1 style="text-align:center;">Workshop Parts Tracker</h1>
 
-    <div class="description">
-        <h1 style="text-align: center">Workshop Parts Tracker</h1>
-        <table>
-            <tr>
-                <th>Part ID</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Created</th>
-                <th>Actions</th>
-            </tr>
+<div class="search-wrapper">
+  <input id="search-input" type="search" placeholder="Search parts…" autofocus>
+  <button id="add-part-btn">➕ Add Part</button>
+</div>
 
-            {% for part in parts %}
-                <tr>
-                    <td>{{ part.id }}</td>
+<div id="results">
+  <table id="parts-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Part ID</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows will populate via JavaScript -->
+    </tbody>
+  </table>
 
-                    <td class="wrap-text desc" data-id="{{ part.id }}">
-                        {{ part.description }}
-                    </td>
+  <div id="actions" style="margin-top:15px; display:none;">
+    <button id="edit-btn" style="display:none;">Edit Selected</button>
+    <button id="delete-btn">Delete Selected</button>
+  </div>
 
-                    <td class="wrap-text loc" data-id="{{ part.id }}">
-                        {{ part.location }}
-                    </td>
+</div>
 
-                    <td>{{ part.date_created.date() }}</td>
+<script>
+const $ = selector => document.querySelector(selector);
+const $$ = selector => document.querySelectorAll(selector);
 
-                    <td>
-                        <button class="edit-btn" data-id="{{ part.id }}">Update</button>
-                        <button class="cancel-btn" data-id="{{ part.id }}" style="display: none;">Cancel</button>
-                        <button class="save-btn" data-id="{{ part.id }}" style="display: none;">Save</button>
-                        <a href="{{ url_for('parts.delete_part', id=part.id) }}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        
-            <tr>
-                <form action="/" method="POST">
-                    <td>-</td>
-                    <td><input type="text" name="description" id="description" required></td>
-                    <td><input type="text" name="location" id="location" required></td>
-                    <td>-</td>
-                    <td><input type="submit" value="Add Part"></td>
-                </form>
-            </tr>
-        </table>
-        
-        {% if parts|length < 1 %}
-            <h4 style="text-align: center;">It's lonely in here. Won't you create a part, please?</h4>
-        {% endif %}
-    </div>
-       
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.addEventListener('click', function (event) {
-            const target = event.target;
-            const id = target.dataset.id;
+function renderParts(parts) {
+  const tbody = $('#parts-table tbody');
+  tbody.innerHTML = '';
 
-            // Handle Edit
-            if (target.classList.contains('edit-btn')) {
-                const descTd = document.querySelector(`.desc[data-id="${id}"]`);
-                const locTd = document.querySelector(`.loc[data-id="${id}"]`);
+  parts.forEach(part => {
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr data-id="${part.id}">
+        <td><input type="checkbox" class="row-select"></td>
+        <td>${part.id}</td>
+        <td>${part.description}</td>
+        <td>${part.location}</td>
+        <td>${part.date_created}</td>
+      </tr>
+    `);
+  });
+  attachSelectionListeners();
+}
 
-                const currentDesc = descTd.textContent.trim();
-                const currentLoc = locTd.textContent.trim();
+async function doSearch(q = '') {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+  const parts = await res.json();
+  renderParts(parts);
+}
 
-                descTd.innerHTML = `<input type="text" value="${currentDesc}" style="width: 90%;">`;
-                locTd.innerHTML = `<input type="text" value="${currentLoc}" style="width: 90%;">`;
+function updateActionButtons() {
+  const selected = $$('.row-select:checked');
+  $('#actions').style.display = selected.length ? 'block' : 'none';
+  $('#edit-btn').style.display = selected.length === 1 ? 'inline-block' : 'none';
+}
 
-                target.style.display = 'none';
-                document.querySelector(`.cancel-btn[data-id="${id}"]`).style.display = 'inline-block';
-                document.querySelector(`.save-btn[data-id="${id}"]`).style.display = 'inline-block';
-            }
-
-            // Handle Cancel
-            else if (target.classList.contains('cancel-btn')) {
-                window.location.reload(); // quick way to revert
-            }
-
-            // Handle Save
-            else if (target.classList.contains('save-btn')) {
-                const descInput = document.querySelector(`.desc[data-id="${id}"] input`);
-                const locInput = document.querySelector(`.loc[data-id="${id}"] input`);
-
-                const newDesc = descInput.value;
-                const newLoc = locInput.value;
-
-                fetch(`/update-inline/${id}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        description: newDesc,
-                        location: newLoc
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert('Update failed');
-                    }
-                });
-            }
-        });
+function attachSelectionListeners() {
+  $$('.row-select').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('tr').classList.toggle('selected', cb.checked);
+      updateActionButtons();
     });
-    </script>
+  });
+}
 
+$('#search-input').addEventListener('input', () => {
+  doSearch($('#search-input').value);
+});
+
+// Initial load
+doSearch();
+
+$('#edit-btn').onclick = () => {
+  const selectedRow = $('.row-select:checked').closest('tr');
+  const id = selectedRow.dataset.id;
+  window.location.href = `/parts/edit/${id}`;
+};
+
+$('#delete-btn').onclick = () => {
+  const ids = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
+
+  if (confirm(`Delete ${ids.length} part(s)?`)) {
+    fetch('/parts/bulk-delete', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ ids })
+    }).then(r => r.ok ? doSearch($('#search-input').value) : alert('Deletion failed'));
+  }
+};
+
+$('#add-part-btn').onclick = () => window.location.href = '/parts/new';
+</script>
 {% endblock %}
-

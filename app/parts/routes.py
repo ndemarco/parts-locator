@@ -21,6 +21,18 @@ def index():
     else:
         parts = Parts.query.filter(Parts.deleted_at == None).order_by(Parts.date_created).all()
         return render_template('index.html', parts=parts)
+    
+@bp.route('/parts/new', methods=['GET', 'POST'])
+def new_part():
+    if request.method == 'POST':
+        description = request.form['description']
+        location = request.form['location']
+        part = Parts(description=description, location=location)
+        db.session.add(part)
+        db.session.commit()
+        return redirect(url_for('parts.index'))
+
+    return render_template('new_part.html')
 
 @bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):

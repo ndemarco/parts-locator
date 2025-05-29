@@ -54,3 +54,21 @@ table input[type="submit"] {
     content: "⚠ ";
     color: orange;
 }
+
+.search-wrapper {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#search-input {
+    width: min(400px, 80%);
+    padding: .6rem 1rem;
+    font-size: 1.1rem;
+}
+
+#add-part-btn {
+    margin-left: 0.5rem;
+    padding: .6rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}

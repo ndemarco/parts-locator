@@ -9,8 +9,6 @@
     </head>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const searchBox = document.getElementById('live-search');
-        const resultsBox = document.getElementById('live-results');
 
         let timeout = null;
 
@@ -47,10 +45,6 @@
 </script>
 
     <body>
-        <header style="background: #eee; padding: 10px; text-align: center;">
-            <input type="text" id="live-search" placeholder="Search parts..." style="width: 300px; padding: 5px;">
-            <div id="live-results" style="background:white; max-height: 200px; overflow-y: auto; margin-top: 5px;"></div>
-        </header>
 
     {% block body %}{% endblock %}
     </body>
