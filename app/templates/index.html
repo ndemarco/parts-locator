@@ -15,9 +15,16 @@
 {% block body %}
 <h1 style="text-align:center;">Workshop Parts Tracker</h1>
 
+
+<!-- Search and action buttons -->
 <div class="search-wrapper">
-  <input id="search-input" type="search" placeholder="Search parts…" autofocus>
-  <button id="add-part-btn">➕ Add Part</button>
+    <input id="search-input" type="search" placeholder="Search parts..." autofocus>
+
+    <div id="action-bar" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+        <button id="add-part-btn">➕ Add Part</button>
+        <button id="edit-btn" style="display: none;">✏️ Edit Selected</button>
+        <button id="delete-btn" style="display: none;">🗑️ Delete Selected</button> 
+    </div>
 </div>
 
 <div id="results">
@@ -35,12 +42,6 @@
       <!-- Rows will populate via JavaScript -->
     </tbody>
   </table>
-
-  <div id="actions" style="margin-top:15px; display:none;">
-    <button id="edit-btn" style="display:none;">Edit Selected</button>
-    <button id="delete-btn">Delete Selected</button>
-  </div>
-
 </div>
 
 <script>
@@ -83,9 +84,9 @@ $('#search-input').addEventListener('input', () => {
 });
 
 function updateActionButtons() {
-  const selected = $$('.row-select:checked');
-  $('#actions').style.display = selected.length ? 'block' : 'none';
-  $('#edit-btn').style.display = selected.length === 1 ? 'inline-block' : 'none';
+    const selected = $$('.row-select:checked');
+    $('#edit-btn').style.display = selected.length ===1 ? 'inline-block' : 'none';
+    $('#delete-btn').style.display = selected.length ? 'inline-block' : 'none';
 }
 
 function attachSelectionListeners() {
