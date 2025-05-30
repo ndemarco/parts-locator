@@ -7,43 +7,6 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         {% block head %}{% endblock %}
     </head>
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            let timeout = null;
-
-            searchBox.addEventListener('input', function () {
-                clearTimeout(timeout);
-                const query = searchBox.value;
-
-                if (query.length < 2) {
-                    resultsBox.innerHTML = '';
-                    return;
-                }
-
-                timeout = setTimeout(() => {
-                    fetch(`/api/search?q=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (!data.results.length) {
-                                resultsBox.innerHTML = '<p style="text-align:left; margin:0.5em;">No results</p>';
-                                return;
-                            }
-
-                            resultsBox.innerHTML = data.results.map(part => `
-                                <a href="/update/${part.id}" style="text-decoration: none; color: inherit;">
-                                    <div style="padding: 5px; border-bottom: 1px solid #ccc;">
-                                        <strong>${part.description}</strong><br>
-                                        <small>${part.location} – ${part.created}</small>
-                                    </div>
-                                </a>
-                            `).join('');
-                        });
-                }, 300); // debounce time
-            });
-        });
-    </script> -->
-
     <body>
 
     {% block body %}{% endblock %}
