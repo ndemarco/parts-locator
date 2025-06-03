@@ -10,6 +10,7 @@ const editBtn = $('#edit-btn');
 const deleteBtn = $('#delete-btn');
 const showDeletedBtn = $('#show-deleted-btn')
 
+// Populates Parts HTML table 
 function renderParts(parts) {
   partsTableBody.innerHTML = '';
 
