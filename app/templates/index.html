@@ -14,10 +14,9 @@
 
     <div id="action-bar">
         <button id="add-part-btn">➕ Add Part</button>
-        <button id="edit-btn" style="display: none;">✏️ Edit Selected</button>
-        <button id="delete-btn" style="display: none;">🗑️ Delete Selected</button>
-        <!-- <button id="show-deleted-btn">🚮 Show Deleted</button> -->
-        <a href="{{ url_for('parts.view_deleted') }}" class="button">🚮 Show Deleted</a>
+        <button id="edit-btn" disabled>✏️ Edit Selected</button>
+        <button id="delete-btn" disabled>🗑️ Delete Selected</button>
+        <button id="show-deleted-btn">🚮 Show Deleted</button>
 
     </div>
 </div>
