@@ -76,7 +76,7 @@ editBtn.addEventListener("click", () => {
 
 // Handle Show Deleted clicks
 showDeletedBtn.addEventListener("click", () => {
-      window.location.href = "{{ url_for('parts.view_deleted') }}";
+      window.location.href = showDeletedBtn.dataset.url;
 });
 
 deleteBtn.addEventListener("click", () => {
