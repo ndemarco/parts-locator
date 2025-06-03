@@ -2,14 +2,6 @@
 
 {% block head %}
 <title>Workshop Parts Tracker</title>
-<style>
-  .search-wrapper { text-align:center; margin: 2rem 0; }
-  #search-input { width: min(400px,90%); padding: .6rem 1rem; font-size: 1.1rem; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { padding: .4rem .6rem; border-bottom: 1px solid #ddd; }
-  tr.selected { background-color: #eef; }
-  button { margin-right: .5rem; }
-</style>
 {% endblock %}
 
 {% block body %}
@@ -19,8 +11,9 @@
 <!-- Search and action buttons -->
 <div class="search-wrapper">
     <input id="search-input" type="search" placeholder="Search parts..." autofocus>
+    <a href="{{ url_for('parts.view_deleted') }}" id="show_deleted_link">Show Deleted</a>
 
-    <div id="action-bar" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+    <div id="action-bar">
         <button id="add-part-btn">➕ Add Part</button>
         <button id="edit-btn" style="display: none;">✏️ Edit Selected</button>
         <button id="delete-btn" style="display: none;">🗑️ Delete Selected</button> 
@@ -44,95 +37,6 @@
   </table>
 </div>
 
-<script>
-const $ = selector => document.querySelector(selector);
-const $$ = selector => document.querySelectorAll(selector);
+<script src="{{ url_for('static', filename='js/parts_tracker.js')}}" defer></script>
 
-function renderParts(parts) {
-  const tbody = $('#parts-table tbody');
-  tbody.innerHTML = '';
-
-  parts.forEach(part => {
-    tbody.insertAdjacentHTML('beforeend', `
-      <tr data-id="${part.id}">
-        <td><input type="checkbox" class="row-select"></td>
-        <td>${part.id}</td>
-        <td>${part.description}</td>
-        <td>${part.location}</td>
-        <td>${part.date_created}</td>
-      </tr>
-    `);
-  });
-  attachSelectionListeners();
-}
-
-async function doSearch(q = '') {
-  const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-  const parts = await res.json();
-  renderParts(parts);
-}
-
-function updateSearch(query) {
-    const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
-    window.history.replaceState({ path: newUrl }, '', newUrl);
-    doSearch(query)
-}
-
-$('#search-input').addEventListener('input', () => {
-    const query = $('#search-input').value;
-    updateSearch(query);
-});
-
-function updateActionButtons() {
-    const selected = $$('.row-select:checked');
-    $('#edit-btn').style.display = selected.length ===1 ? 'inline-block' : 'none';
-    $('#delete-btn').style.display = selected.length ? 'inline-block' : 'none';
-}
-
-function attachSelectionListeners() {
-  $$('.row-select').forEach(cb => {
-    cb.addEventListener('change', () => {
-      cb.closest('tr').classList.toggle('selected', cb.checked);
-      updateActionButtons();
-    });
-  });
-}
-
-
-
-// Initial load
-window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get ('q') || '';
-    $('#search-input').value = query;
-    doSearch(query);
-});
-
-$('#add-part-btn').onclick = () => {
-    sessionStorage.setItem('returnTo', window.location.href);
-    window.location.href = '/parts/new';
-};
-
-$('#edit-btn').onclick = () => {
-    const selectedRow = $('.row-select:checked').closest('tr');
-    const id = selectedRow.dataset.id;
-    sessionStorage.setItem('returnTo', window.location.href);
-    window.location.href = `/update/${id}`;
-};
-
-$('#delete-btn').onclick = () => {
-  const ids = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
-
-  if (confirm(`Delete ${ids.length} part(s)?`)) {
-    fetch('/parts/bulk-delete', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ ids })
-    }).then(r => r.ok ? doSearch($('#search-input').value) : alert('Deletion failed'));
-  }
-};
-
-
-
-</script>
 {% endblock %}
