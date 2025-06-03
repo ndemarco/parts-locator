@@ -72,3 +72,12 @@ table input[type="submit"] {
     font-size: 1rem;
     cursor: pointer;
 }
+
+
+ #action-bar {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+ }
