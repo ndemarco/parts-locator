@@ -60,6 +60,38 @@ def delete_part(id):
     db.session.commit()
     return redirect(url_for('parts.index'))
 
+# app/parts/routes.py  (or wherever your parts blueprint lives)
+
+@bp.route('/parts/bulk-delete', methods=['POST'])
+def delete_parts():
+    """
+    Soft-delete multiple parts.
+    Expects JSON like: { "ids": [1, 2, 3] }
+    """
+    payload = request.get_json(silent=True) or {}
+    ids = payload.get('ids', [])
+
+    # No IDs?  → 400 Bad Request
+    if not ids:
+        return jsonify({"error": "No IDs supplied"}), 400
+
+    # Pull the matching rows (single round-trip to DB)
+    parts = Parts.query.filter(Parts.id.in_(ids)).all()
+
+    # Optional: sanity-check we found everything
+    if len(parts) != len(ids):
+        missing = set(ids) - {p.id for p in parts}
+        return jsonify({"error": f"IDs not found: {sorted(missing)}"}), 404
+
+    # Soft-delete
+    now = datetime.now(timezone.utc)
+    for part in parts:
+        part.deleted_at = now
+
+    db.session.commit()
+    return jsonify({"deleted": len(parts)}), 200
+
+
 @bp.route('/view_deleted_parts')
 def view_deleted():
     deleted_parts = Parts.query.filter(Parts.deleted_at != None).order_by(Parts.deleted_at.desc()).all()
