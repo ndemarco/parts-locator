@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{% if action == 'update' %}Edit Part{% else %}Add New Part{% endif %}</title>
+  <title>{% if action == 'update' %}Edit Part{% else %}Add New Part{% endif %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/part_form.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -9,43 +10,35 @@
   {% if action == 'update' %}Edit Part{% else %}Add New Part{% endif %}
 </h1>
 
-<form method="POST" style="width:300px;margin:auto;">
-  <div>
-    <label>Description:</label><br>
-    <input type="text" name="description" id="description" required style="width:100%;"
-            value="{{ part.description if action == 'update' else '' }}">
-  </div>
-  
-  <div style="margin-top:10px;">
-    <label>Location:</label><br>
-    <input type="text" name="location" required style="width:100%;"
-            value="{{ part.location if action == 'update' else ''}}">
+<form method="POST" class="form-wrapper">
+  <div class="form-group">
+    <label for="location">Location:</label>
+    <input type="text" name="location" id="location" required
+           value="{{ part.location if action == 'update' else '' }}">
   </div>
 
-  <div style="text-align:center;margin-top:15px;">
-    <button type="button" onclick="window.history.back()" style="margin-left: 10px;">Cancel</button>
-    </button>
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <input type="text" name="description" id="description" required
+           value="{{ part.description if action == 'update' else default_description }}">
+  </div>
+  <div class="button-row">
+    <button type="button" onclick="window.history.back()">Cancel</button>
     <button type="submit">
       {% if action == 'update' %}Update Part{% else %}Add Part{% endif %}
     </button>
-
   </div>
 </form>
 {% endblock %}
 
 {% block scripts %}
 <script>
-
-  // Focus the input field when the page loads.
   document.addEventListener('DOMContentLoaded', function () {
-    const input = document.getElementById('description');
-    if (input) {
-      input.focus();
-    }
-  });
+    // Focus the description field
+    const input = document.getElementById('location');
+    if (input) input.focus();
 
-  // Add a hidden input for returnTo if in sessionStorage.
-  document.addEventListener('DOMContentLoaded', () => {
+    // If sessionStorage has returnTo, add it to the form
     const returnTo = sessionStorage.getItem('returnTo');
     if (returnTo) {
       const form = document.querySelector('form');

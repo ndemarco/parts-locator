@@ -1,0 +1,29 @@
+.form-wrapper {
+  width: 300px;
+  margin: auto;
+}
+
+.form-wrapper label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.form-wrapper input[type="text"] {
+  width: 100%;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.form-wrapper .form-group {
+  margin-top: 10px;
+}
+
+.form-wrapper .button-row {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.form-wrapper button {
+  margin: 0 5px;
+  padding: 0.4rem 1rem;
+}
