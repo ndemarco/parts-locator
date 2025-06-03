@@ -25,7 +25,6 @@ function renderParts(parts) {
       </tr>
     `);
   });
-  attachSelectionListeners();
 }
 
 async function doSearch(q = '') {
@@ -45,21 +44,6 @@ searchInput.addEventListener('input', () => {
     updateSearch(query);
 });
 
-function updateActionButtons() {
-    const selected = $$('.row-select:checked');
-    editBtn.style.display = selected.length ===1 ? 'inline-block' : 'none';
-    deleteBtn.style.display = selected.length ? 'inline-block' : 'none';
-}
-
-function attachSelectionListeners() {
-  $$('.row-select').forEach(cb => {
-    cb.addEventListener('change', () => {
-      cb.closest('tr').classList.toggle('selected', cb.checked);
-      updateActionButtons();
-    });
-  });
-}
-
 // Initial load
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -68,6 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
     doSearch(query);
 });
 
+// Handle Add Part clicks
 addPartBtn.addEventListener("click", () => {
   const searchValue = searchInput?.value || "";
   const url = new URL("/parts/new", window.location.origin);
@@ -76,6 +61,7 @@ addPartBtn.addEventListener("click", () => {
   window.location.href = url.toString();
 });
 
+// Handle Edit Selected clicks
 editBtn.onclick = () => {
     const selectedRow = $('.row-select:checked').closest('tr');
     const id = selectedRow.dataset.id;
@@ -83,6 +69,7 @@ editBtn.onclick = () => {
     window.location.href = `/update/${id}`;
 };
 
+// Handle Show Deleted clicks
 showDeletedBtn.onclick = () => {
       window.location.href = "{{ url_for('parts.view_deleted') }}";
 }
