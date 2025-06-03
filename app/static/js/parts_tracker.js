@@ -62,19 +62,19 @@ addPartBtn.addEventListener("click", () => {
 });
 
 // Handle Edit Selected clicks
-editBtn.onclick = () => {
+editBtn.addEventListener("click", () => {
     const selectedRow = $('.row-select:checked').closest('tr');
     const id = selectedRow.dataset.id;
     sessionStorage.setItem('returnTo', window.location.href);
     window.location.href = `/update/${id}`;
-};
+});
 
 // Handle Show Deleted clicks
-showDeletedBtn.onclick = () => {
+showDeletedBtn.addEventListener("click", () => {
       window.location.href = "{{ url_for('parts.view_deleted') }}";
-}
+});
 
-deleteBtn.onclick = () => {
+deleteBtn.addEventListener("click", () => {
   const idsToDelete = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
 
   if (confirm(`Delete ${idsToDelete.length} part(s)?`)) {
@@ -84,4 +84,4 @@ deleteBtn.onclick = () => {
       body: JSON.stringify({ ids: idsToDelete })
     }).then(r => r.ok ? doSearch(searchInput.value) : alert('Deletion failed'));
   }
-};
+});
