@@ -32,8 +32,10 @@ def new_part():
         db.session.add(part)
         db.session.commit()
         return redirect(return_to)
-
-    return render_template('part_form.html')
+    # Prefill description from search
+    else:
+        default_description = request.args.get("default_description", "")
+        return render_template("part_form.html", default_description=default_description)
 
 @bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_part(id):

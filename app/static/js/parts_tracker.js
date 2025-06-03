@@ -66,10 +66,13 @@ window.addEventListener('DOMContentLoaded', () => {
     doSearch(query);
 });
 
-addPartBtn.onclick = () => {
-    sessionStorage.setItem('returnTo', window.location.href);
-    window.location.href = '/parts/new';
-};
+addPartBtn.addEventListener("click", () => {
+  const searchValue = searchInput?.value || "";
+  const url = new URL("/parts/new", window.location.origin);
+  url.searchParams.set("default_description", searchValue);
+  sessionStorage.setItem('returnTo', window.location.href)
+  window.location.href = url.toString();
+});
 
 editBtn.onclick = () => {
     const selectedRow = $('.row-select:checked').closest('tr');
