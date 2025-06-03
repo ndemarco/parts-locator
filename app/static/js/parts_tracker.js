@@ -8,6 +8,7 @@ const partsTableBody = $('#parts-table tbody');
 const addPartBtn = $('#add-part-btn');
 const editBtn = $('#edit-btn');
 const deleteBtn = $('#delete-btn');
+const showDeletedBtn = $('#show-deleted-btn')
 
 function renderParts(parts) {
   partsTableBody.innerHTML = '';
@@ -80,6 +81,10 @@ editBtn.onclick = () => {
     sessionStorage.setItem('returnTo', window.location.href);
     window.location.href = `/update/${id}`;
 };
+
+showDeletedBtn.onclick = () => {
+      window.location.href = "{{ url_for('parts.view_deleted') }}";
+}
 
 deleteBtn.onclick = () => {
   const idsToDelete = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
