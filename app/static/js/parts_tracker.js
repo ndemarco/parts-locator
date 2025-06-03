@@ -29,6 +29,10 @@ function renderParts(parts) {
 
 async function doSearch(q = '') {
   const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+  if (!res.ok) {
+    alert("Failed to fetch parts.");
+    return;
+  }
   const parts = await res.json();
   renderParts(parts);
 }
@@ -64,6 +68,7 @@ addPartBtn.addEventListener("click", () => {
 // Handle Edit Selected clicks
 editBtn.addEventListener("click", () => {
     const selectedRow = $('.row-select:checked').closest('tr');
+    if (!selectedRow) return alert("No part selected.");
     const id = selectedRow.dataset.id;
     sessionStorage.setItem('returnTo', window.location.href);
     window.location.href = `/update/${id}`;
