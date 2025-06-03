@@ -50,11 +50,6 @@ table input[type="submit"] {
     color: #888;
 }
 
-.deleted-row td::before {
-    content: "⚠ ";
-    color: orange;
-}
-
 .search-wrapper {
     text-align: center;
     margin: 2rem 0;
