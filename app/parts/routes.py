@@ -3,7 +3,6 @@ from . import bp
 from app.models import db, Parts
 from datetime import datetime, timezone
 
-
 @bp.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':

@@ -22,6 +22,7 @@
     <input type="text" name="description" id="description" required
            value="{{ part.description if action == 'update' else default_description }}">
   </div>
+
   <div class="button-row">
     <button type="button" onclick="window.history.back()">Cancel</button>
     <button type="submit">
@@ -29,26 +30,15 @@
     </button>
   </div>
 </form>
+
+<div class="live-search-results">
+  <h2>Matching Existing Parts</h2>
+  {% include '_parts_table.html' %}
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Focus the description field
-    const input = document.getElementById('location');
-    if (input) input.focus();
-
-    // If sessionStorage has returnTo, add it to the form
-    const returnTo = sessionStorage.getItem('returnTo');
-    if (returnTo) {
-      const form = document.querySelector('form');
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'returnTo';
-      input.value = returnTo;
-      form.appendChild(input);
-      sessionStorage.removeItem('returnTo');
-    }
-  });
-</script>
+  <script src="{{ url_for('static', filename='js/new_part.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/parts_tracker.js')}}"></script>
 {% endblock %}

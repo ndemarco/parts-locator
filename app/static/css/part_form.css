@@ -27,3 +27,26 @@
   margin: 0 5px;
   padding: 0.4rem 1rem;
 }
+
+.suggestions {
+  border: 1px solid #ccc;
+  background: white;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #eef;
+}
+
+.form-group {
+  position: relative;
+}

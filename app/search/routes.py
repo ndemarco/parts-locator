@@ -3,9 +3,14 @@ from . import bp
 from app.models import Parts
 from sqlalchemy import or_
 
+# Search parts. Return results in a JSON structure
 @bp.route('/api/search')
 def search_api():
     query = request.args.get('q', '')
+    try:
+        limit = min(int(request.args.get('limit', 50)), 200)
+    except ValueError:
+        limit = 50 # Fall back to the the default if not an integer.
 
     base_query = Parts.query
     if query:
@@ -16,10 +21,10 @@ def search_api():
             Parts.mcmaster_id.ilike(f'%{query}%')
             )
         )
-    # Filter soft_deleted parts
+    # Filter out soft_deleted parts
     base_query = base_query.filter(Parts.deleted_at.is_(None))
 
-    matches = base_query.order_by(Parts.date_created).all()
+    matches = base_query.order_by(Parts.date_created).limit(limit).all()
 
     return jsonify([
         {

@@ -10,13 +10,19 @@ const editBtn = $('#edit-btn');
 const deleteBtn = $('#delete-btn');
 const showDeletedBtn = $('#show-deleted-btn')
 
-// Populates Parts HTML table 
+// Populates Parts HTML table.
 function renderParts(parts) {
-  partsTableBody.innerHTML = '';
+  const tbody = document.querySelector('#parts-table tbody');
+  
+  // Is there a table?
+  if (!tbody) return;
+
+  // Clear records from table
+  tbody.innerHTML = '';
 
   parts.forEach(part => {
-    partsTableBody.insertAdjacentHTML('beforeend', `
-      <tr data-id="${part.id}">
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr data-id="${part.id}" class="parts_row">
         <td><input type="checkbox" class="row-select"></td>
         <td>${part.id}</td>
         <td>${part.description}</td>
@@ -26,6 +32,25 @@ function renderParts(parts) {
     `);
   });
 }
+
+
+function bindRowEvents() {
+  $$('.parts-row').forEach(row => {
+    const checkbox = row.querySelector('.row-select');
+
+    // Clicking the checkbox -> activate row & toggle selection
+    checkbox.addEventListener('click', (e) => {
+      e.stopPropagation();  // prevents row click from firing
+      setActiveRow(row);
+    });
+  });
+}
+
+function setActiveRow(row) {
+  $$('.parts-row').forEach(r => r.classList.remove('active-row'));
+  row-classList.add('active-row');
+}
+
 
 async function doSearch(q = '') {
   const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
@@ -58,11 +83,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Handle Add Part clicks
 addPartBtn.addEventListener("click", () => {
-  const searchValue = searchInput?.value || "";
-  const url = new URL("/parts/new", window.location.origin);
-  url.searchParams.set("default_description", searchValue);
-  sessionStorage.setItem('returnTo', window.location.href)
-  window.location.href = url.toString();
+  const activeRow = $('.parts-row.active-row');
+  if (activeRow) {
+    const partId = activeRow.dataset.id;
+    window.location.href = `/parts/new@copy_from=${partId}`;
+  } else {
+    window.location.href = '/parts/new';
+  }
 });
 
 // Handle Edit Selected clicks

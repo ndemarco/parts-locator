@@ -22,20 +22,7 @@
 </div>
 
 <div id="results">
-  <table id="parts-table">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Part ID</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Created</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Rows will populate via JavaScript -->
-    </tbody>
-  </table>
+{% include '_parts_table.html' %}
 </div>
 
 <script src="{{ url_for('static', filename='js/parts_tracker.js')}}" defer></script>
