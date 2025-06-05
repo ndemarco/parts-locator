@@ -68,53 +68,74 @@ function updateSearch(query) {
     doSearch(query)
 }
 
-searchInput.addEventListener('input', () => {
-    const query = $('#search-input').value;
-    updateSearch(query);
-});
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        const query = $('#search-input').value;
+        updateSearch(query);
+    });
 
-// Initial load
-window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get ('q') || '';
-    searchInput.value = query;
-    doSearch(query);
-});
+    // Initial load
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('q') || '';
+        searchInput.value = query;
+        doSearch(query);
+    });
+} else {
+    // Fallback for pages without a search box
+    window.addEventListener('DOMContentLoaded', () => {
+        doSearch('');
+    });
+}
 
 // Handle Add Part clicks
-addPartBtn.addEventListener("click", () => {
-  const activeRow = $('.parts-row.active-row');
-  if (activeRow) {
-    const descriptionCell = activeRow.querySelector('td:nth-child(3)');
-    const desc = descriptionCell ? descriptionCell.textContent : '';
-    window.location.href = `/parts/new?default_description=${encodeURIComponent(desc)}`;
-  } else {
-    window.location.href = '/parts/new';
-  }
-});
+if (addPartBtn) {
+  addPartBtn.addEventListener("click", () => {
+    const activeRow = $('.parts-row.active-row');
+    if (activeRow) {
+      const descriptionCell = activeRow.querySelector('td:nth-child(3)');
+      const desc = descriptionCell ? descriptionCell.textContent : '';
+      window.location.href = `/parts/new?default_description=${encodeURIComponent(desc)}`;
+    } else {
+      window.location.href = '/parts/new';
+    }
+  });
+}
 
 // Handle Edit Selected clicks
-editBtn.addEventListener("click", () => {
-    const selectedRow = $('.row-select:checked').closest('tr');
-    if (!selectedRow) return alert("No part selected.");
-    const id = selectedRow.dataset.id;
-    sessionStorage.setItem('returnTo', window.location.href);
-    window.location.href = `/update/${id}`;
-});
+if (editBtn) {
+  editBtn.addEventListener("click", () => {
+      const selectedRow = $('.row-select:checked').closest('tr');
+      if (!selectedRow) return alert("No part selected.");
+      const id = selectedRow.dataset.id;
+      sessionStorage.setItem('returnTo', window.location.href);
+      window.location.href = `/update/${id}`;
+  });
+}
 
 // Handle Show Deleted clicks
-showDeletedBtn.addEventListener("click", () => {
-      window.location.href = showDeletedBtn.dataset.url;
-});
+if (showDeletedBtn) {
+  showDeletedBtn.addEventListener("click", () => {
+        window.location.href = showDeletedBtn.dataset.url;
+  });
+}
 
-deleteBtn.addEventListener("click", () => {
-  const idsToDelete = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
+if (deleteBtn) {
+  deleteBtn.addEventListener("click", () => {
+    const idsToDelete = Array.from($$('.row-select:checked')).map(cb => cb.closest('tr').dataset.id);
 
-  if (confirm(`Delete ${idsToDelete.length} part(s)?`)) {
-    fetch('/parts/bulk-delete', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ ids: idsToDelete })
-    }).then(r => r.ok ? doSearch(searchInput.value) : alert('Deletion failed'));
-  }
-});
+    if (confirm(`Delete ${idsToDelete.length} part(s)?`)) {
+      fetch('/parts/bulk-delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ ids: idsToDelete })
+      }).then(r => {
+        if (r.ok) {
+          doSearch(searchInput ? searchInput.value : '');
+        } else {
+          alert('Deletion failed');
+        }
+      });
+    }
+  });
+}
