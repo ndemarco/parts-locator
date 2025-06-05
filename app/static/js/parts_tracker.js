@@ -22,7 +22,7 @@ function renderParts(parts) {
 
   parts.forEach(part => {
     tbody.insertAdjacentHTML('beforeend', `
-      <tr data-id="${part.id}" class="parts_row">
+      <tr data-id="${part.id}" class="parts-row">
         <td><input type="checkbox" class="row-select"></td>
         <td>${part.id}</td>
         <td>${part.description}</td>
@@ -48,7 +48,7 @@ function bindRowEvents() {
 
 function setActiveRow(row) {
   $$('.parts-row').forEach(r => r.classList.remove('active-row'));
-  row-classList.add('active-row');
+  row.classList.add('active-row');
 }
 
 
@@ -85,8 +85,9 @@ window.addEventListener('DOMContentLoaded', () => {
 addPartBtn.addEventListener("click", () => {
   const activeRow = $('.parts-row.active-row');
   if (activeRow) {
-    const partId = activeRow.dataset.id;
-    window.location.href = `/parts/new@copy_from=${partId}`;
+    const descriptionCell = activeRow.querySelector('td:nth-child(3)');
+    const desc = descriptionCell ? descriptionCell.textContent : '';
+    window.location.href = `/parts/new?default_description=${encodeURIComponent(desc)}`;
   } else {
     window.location.href = '/parts/new';
   }
