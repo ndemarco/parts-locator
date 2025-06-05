@@ -31,6 +31,8 @@ function renderParts(parts) {
       </tr>
     `);
   });
+  // After rendering, wire up click handlers for the new rows
+  bindRowEvents();
 }
 
 
@@ -41,6 +43,11 @@ function bindRowEvents() {
     // Clicking the checkbox -> activate row & toggle selection
     checkbox.addEventListener('click', (e) => {
       e.stopPropagation();  // prevents row click from firing
+      setActiveRow(row);
+    });
+
+    // Clicking anywhere on the row should highlight it
+    row.addEventListener('click', () => {
       setActiveRow(row);
     });
   });
