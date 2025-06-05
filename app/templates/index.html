@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Workshop Parts Tracker</title>
+<title id="title">Parts Tracker</title>
 {% endblock %}
 
 {% block body %}
@@ -26,5 +26,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/parts_tracker.js')}}" defer></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
 
 {% endblock %}
