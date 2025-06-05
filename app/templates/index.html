@@ -1,31 +1,32 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title id="title">Parts Tracker</title>
+    <title id="title">Parts Tracker</title>
 {% endblock %}
 
 {% block body %}
-<h1 style="text-align:center;">Workshop Parts Tracker</h1>
+    <h1 style="text-align:center;">Workshop Parts Tracker</h1>
 
+    <!-- Search and action buttons -->
+    <div class="search-wrapper">
+        <input id="search-input" type="search" placeholder="Search parts..." autofocus>
 
-<!-- Search and action buttons -->
-<div class="search-wrapper">
-    <input id="search-input" type="search" placeholder="Search parts..." autofocus>
+        <div id="action-bar">
+            <button id="add-part-btn">➕ Add Part</button>
+            <button id="edit-btn">✏️ Edit Selected</button>
+            <button id="delete-btn">🗑️ Delete Selected</button>
+            <button id="show-deleted-btn" data-url="{{ url_for('parts.view_deleted') }}">🚮 Show Deleted</button>
 
-    <div id="action-bar">
-        <button id="add-part-btn">➕ Add Part</button>
-        <button id="edit-btn">✏️ Edit Selected</button>
-        <button id="delete-btn">🗑️ Delete Selected</button>
-        <button id="show-deleted-btn" data-url="{{ url_for('parts.view_deleted') }}">🚮 Show Deleted</button>
-
+        </div>
     </div>
-</div>
 
-<div id="results">
-{% include '_parts_table.html' %}
-</div>
+    <div id="results">
+        {% include '_parts_table.html' %}
+    </div>
+{% endblock %}
 
-<script src="{{ url_for('static', filename='js/parts_tracker.js')}}" defer></script>
-<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/parts_tracker.js')}}" defer></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 
 {% endblock %}
