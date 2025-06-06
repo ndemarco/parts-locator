@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Focus the description field
     const locationInput = document.getElementById('location');
     const descriptionInput = document.getElementById('description');
     // const suggestionsContainer = document.getElementById('description-suggestions');
