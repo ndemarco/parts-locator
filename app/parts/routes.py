@@ -36,6 +36,18 @@ def new_part():
         default_description = request.args.get("default_description", "")
         return render_template("part_form.html", default_description=default_description)
 
+@bp.route('/parts/new@copy_from=<int:copy_id>', methods=['GET'])
+def copy_part(copy_id):
+    """Render the new part form with fields copied from an existing part.
+
+    The destination location is cleared so the user must provide a new one.
+    """
+    part = Parts.query.get_or_404(copy_id)
+    return render_template(
+        "part_form.html",
+        default_description=part.description
+    )
+
 @bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_part(id):
     return_to = request.form.get('returnTo') or url_for('parts.index')
