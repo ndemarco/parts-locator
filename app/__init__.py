@@ -1,6 +1,8 @@
 import os
 from flask import Flask
-from app.models import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -8,9 +10,12 @@ def create_app():
     app.config['SECRET_KEY'] = 'alotbsol'
     
     os.makedirs(app.instance_path, exist_ok=True)
+
+    # Initialize the db with the Flask app
     db.init_app(app)
 
     with app.app_context():
+        from app import models  # Register models.py
         from app.parts import bp as parts_bp
         from app.search import bp as search_bp
         from app.locations import bp as locations_bp
