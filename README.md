@@ -50,7 +50,7 @@ pip install -r requirements.txt
 ### 4. Run the App
 
 ```bash
-python app.py
+python run.py
 ```
 
 The app will be available at http://127.0.0.1:5000, normally known as http://localhost:5000
