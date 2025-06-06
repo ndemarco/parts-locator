@@ -2,15 +2,7 @@ from datetime import datetime, timezone
 from sqlalchemy import UniqueConstraint
 from app import db
 
-class Module(db.Model):
-    __tablename__ = "modules"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    description = db.Column(db.Text)
-
-    def __repr__(self) -> str:
-        return f"<Module {self.name}>"
 
 class Parts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,3 +54,17 @@ class LocationDefinition(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     json_data = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+
+
+    class Module(db.Model):
+    __tablename__ = "modules"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    description = db.Column(db.Text)  # Place to hold the geographic location of a module
+
+    def __repr__(self) -> str:
+        return f"<Module {self.name}>"
+
