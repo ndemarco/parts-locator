@@ -29,8 +29,8 @@ function bindRowEvents() {
         });
         
         // Clicking the checkbox -> activate row & toggle selection
-        checkbox.addEventListener('click', ({ stopPropagation }) => {
-            stopPropagation();  // prevents row click from firing
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();  // prevents row click from firing
             setActiveRow(row);
         });
     });
