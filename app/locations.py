@@ -24,7 +24,7 @@ def store_location_definition(json_text, data):
     db.session.query(LocationDefinition).delete()
     db.session.commit()
 
-    new_def = LocationDefinition(json_data=json_text)
+    new_def = LocationDefinition(name="imported", json_data=json_text)
     db.session.add(new_def)
     db.session.commit()
 
