@@ -1,59 +1,44 @@
-tr.active-row {
-  background-color: #dfefff; /* light blue highlight */
+/* root styles */
+:root {
+    
 }
 
-body, html {
+/* Base Styles */
+html, body {
+    font-size: 16px;
     margin: 0;
     font-family: sans-serif;
     background-color: lightblue;
 }
 
+/* Misc */
+.title {
+    /* Add styling if needed */
+}
+
+
+/* Layout */
 .content {
     margin: 0 auto;
     width: 400px;
 }
 
-table, td, th {
-    border: 1px solid #aaa;
+#action-bar {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
 
-th {
-    height: 30px;
-}
 
-td {
-    text-align: center;
-    padding: 5px;
-}
-
-table inputpty[type="text"] {
-    width: 95%;
-    box-sizing: border-box;
-}
-
-table input[type="submit"] {
-    padding: 5px 10px;
-}
-
+/* Form Layout */
 .form {
     margin-top: 20px;
 }
 
-.wrap-text {
-    white-space: normal;
-    word-break: break-word;
-}
-
-.deleted-row {
-    background-color: #f9f9f9;
-    color: #888;
-}
-
+/* Search UI */
 .search-wrapper {
     text-align: center;
     margin: 2rem 0;
@@ -61,22 +46,14 @@ table input[type="submit"] {
 
 #search-input {
     width: min(400px, 80%);
-    padding: .6rem 1rem;
+    padding: 0.6rem 1rem;
     font-size: 1.1rem;
 }
 
+/* Buttons */
 #add-part-btn {
     margin-left: 0.5rem;
-    padding: .6rem 1rem;
+    padding: 0.6rem 1rem;
     font-size: 1rem;
     cursor: pointer;
 }
-
-
- #action-bar {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
- }

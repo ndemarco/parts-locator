@@ -1,0 +1,40 @@
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #aaa;
+}
+
+td, th {
+    border: 1px solid #aaa;
+    text-align: center;
+    padding: 5px;
+}
+
+th {
+    height: 30px;
+}
+
+tr.active-row {
+    background-color: #dfefff; /* light blue highlight */
+}
+
+.deleted-row {
+    background-color: #f9f9f9;
+    color: #888;
+}
+
+.wrap-text {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Form Elements in Tables */
+table input[type="text"] {
+    width: 95%;
+    box-sizing: border-box;
+}
+
+table input[type="submit"] {
+    padding: 5px 10px;
+}
