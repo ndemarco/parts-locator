@@ -38,9 +38,7 @@ def new_part():
 
 @bp.route('/parts/new@copy_from=<int:copy_id>', methods=['GET'])
 def copy_part(copy_id):
-    """Render the new part form with fields copied from an existing part.
-
-    The destination location is cleared so the user must provide a new one.
+    """Render the new part form with fields below copied from an existing part.
     """
     part = Parts.query.get_or_404(copy_id)
     return render_template(
