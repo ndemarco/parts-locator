@@ -5,6 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 def create_app():
+    '''
+    Application factory function for creating and configuring the Flask app.
+    This allows modular setup and is especially useful for managing configuration,
+    database initialization, and blueprint registration in one place.
+    '''
     app = Flask(__name__, instance_relative_config=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'workshop-parts.db')
     app.config['SECRET_KEY'] = 'alotbsol'
