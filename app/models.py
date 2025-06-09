@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Any
 from sqlalchemy import UniqueConstraint
 from app import db
 
@@ -55,16 +56,68 @@ class LocationDefinition(db.Model):
     json_data = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-
-
-
-    class Module(db.Model):
+class Module(db.Model):
     __tablename__ = "modules"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    description = db.Column(db.Text)  # Place to hold the geographic location of a module
+    description = db.Column(db.Text)
+
+    levels = db.relationship('Level', backref='module', lazy=True)
+
+    def __repr__(self):
+        return f"<Module {self.name}>"  # Default representation
+    
+
+class Level(db.Model):
+    __tablename__ = 'levels'
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(50), nullable=False)
+    module_id = db.Column(db.Integer, db.ForeignKey('modules.id'), nullable=False)
+
+    storage_units = db.relationship('StorageUnit', backref='level', lazy=True)
 
     def __repr__(self) -> str:
-        return f"<Module {self.name}>"
+        return f"<Level {self.label} in Module {self.module.name if self.module else 'unlinked'}>"
+    
+class StorageUnit(db.Model):
+    __tablename__ = 'storage_units'
 
+    id = db.Column(db.Integer, primary_key=True)
+    row_label = db.Column(db.String(10), nullable=False)
+    column_label = db.Column(db.String(10), nullable=False)
+
+    level_id = db.Column(db.Integer, db.ForeignKey('levels.id'), nullable=False)
+    unit_type_id = db.Column(db.String(50), db.ForeignKey('storage_unit_types.id'), nullable=False)
+
+    unit_type = db.relationship("StorageUnitType", backref="storage_units")
+
+    def __repr__(self) -> str:
+        return f"<StorageUnit {self.level_id} R{self.row_label}C{self.column_label}>"
+    
+class StorageUnitType(db.Model):
+    __tablename__ = "storage_unit_types"
+
+    id = db.Column(db.String(50), primary_key=True)
+    label_type_id = db.Column(db.Integer, db.ForeignKey('label_types.id'), nullable=False)
+    description = db.Column(db.String(200))
+    width = db.Column(db.Float)
+
+    label_type = db.relationship("LabelType", backref="storage_unit_types")
+
+    def __repr__(self) -> str:
+        return f"<StorageUnitType {self.id}>"
+    
+
+class LabelType(db.Model):
+    __tablename__ = 'label_types'
+
+    id =db.Column(db.Integer, primary_key=True)
+    technology = db.Column(db.String(100), nullable=False)
+    template_details = db.Column(db.Text)
+
+    def __repr__(self) -> str:
+        return f"<LabelType {self.technology}>"
+
+
+    
