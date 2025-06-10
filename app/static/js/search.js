@@ -37,6 +37,7 @@ function renderParts(parts) {
                 <td>${part.id}</td>
                 <td>${part.description}</td>
                 <td>${part.location}</td>
+                <td>${part.location_id}</td>
                 <td>${part.date_created}</td>
             </tr>
         `);
